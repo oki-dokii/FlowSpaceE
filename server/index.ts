@@ -27,6 +27,9 @@ export async function createServer(opts: { connectDB?: boolean } = {}) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+  
+  // Serve uploaded files
+  app.use('/uploads', express.static('uploads'));
 
   // MongoDB (optional)
   if (connectDB) {
