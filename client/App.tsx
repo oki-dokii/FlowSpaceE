@@ -52,4 +52,10 @@ const App = () => (
   </ThemeProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+const container = document.getElementById("root")!;
+// Avoid calling createRoot multiple times during HMR
+const anyWin = window as any;
+if (!anyWin.__root) {
+  anyWin.__root = createRoot(container);
+}
+anyWin.__root.render(<App />);
