@@ -125,21 +125,36 @@ function Column({ id, title, items }: { id: ColumnId; title: string; items: Card
 
 function KanbanCard({ card }: { card: Card; columnId: ColumnId }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.id });
-  const style = {
-    transform: CSS.Transform.toString(transform),
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, tz: 0 });
+
+  const baseTransform = CSS.Transform.toString(transform);
+  const style: any = {
+    transform: `${baseTransform} translateZ(${tilt.tz}px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
     transition,
   };
+
+  function handleMove(e: React.MouseEvent) {
+    const el = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = (e.clientX - el.left) / el.width - 0.5;
+    const y = (e.clientY - el.top) / el.height - 0.5;
+    setTilt({ rx: Math.max(-6, Math.min(6, -y * 8)), ry: Math.max(-8, Math.min(8, x * 10)), tz: 6 });
+  }
+  function handleLeave() {
+    setTilt({ rx: 0, ry: 0, tz: 0 });
+  }
 
   return (
     <div
       ref={setNodeRef}
-      style={style as any}
+      style={style}
       {...attributes}
       {...listeners}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
       className={cn(
-        "rounded-xl p-3 bg-white shadow hover:shadow-lg border border-black/5 transition-transform will-change-transform",
-        "hover:-translate-y-0.5 hover:ring-2 hover:ring-indigo-200/80",
-        isDragging && "opacity-80 shadow-xl",
+        "rounded-xl p-3 bg-white shadow border border-black/5 transition-transform will-change-transform cursor-grab",
+        "hover:shadow-xl hover:-translate-y-0.5 hover:ring-2 hover:ring-indigo-200/80",
+        isDragging && "opacity-80 shadow-2xl cursor-grabbing scale-105",
         "dark:bg-white/10 dark:border-white/10",
       )}
     >
