@@ -55,6 +55,9 @@ export async function createServer(opts: { connectDB?: boolean } = {}) {
   app.use("/api/boards", boardsRoutes);
   app.use("/api/cards", cardsRoutes);
   app.use("/api", notesRoutes);
+  app.use("/api/activity", activityRoutes);
+  app.use("/api/teams", teamsRoutes);
+  app.use("/api/invite", inviteRoutes);
 
   // Error handler
   app.use(errorHandler);
