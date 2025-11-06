@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Board, listBoards, createBoard, getBoard } from '@/lib/api';
 import { getSocket } from '@/lib/socket';
+import { useAuth } from './AuthContext';
 
 interface BoardContextType {
   currentBoard: Board | null;
