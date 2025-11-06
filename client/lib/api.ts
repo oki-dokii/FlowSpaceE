@@ -86,7 +86,10 @@ export async function listCards(boardId: string) {
     method: 'GET',
     headers: getHeaders(),
     credentials: 'include',
-  });\n  if (!response.ok) throw new Error('Failed to fetch cards');\n  return response.json();\n}
+  });
+  if (!response.ok) throw new Error('Failed to fetch cards');
+  return response.json();
+}
 
 export async function createCard(boardId: string, data: Partial<Card>) {
   const response = await fetch(`${API_URL}/api/cards/${boardId}/cards`, {
