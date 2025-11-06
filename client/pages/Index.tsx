@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import FloatingBackground from "@/components/visuals/FloatingBackground";
+import IndexPreview from "@/components/visuals/IndexPreview";
 
 export default function Index() {
   return (
     <div className="relative min-h-[calc(100vh-64px-40px)] overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_80%_-10%,rgba(124,58,237,0.35),transparent),radial-gradient(800px_400px_at_10%_10%,rgba(99,102,241,0.25),transparent)]" />
+      <FloatingBackground />
 
       <div className="container mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div>
@@ -23,23 +25,25 @@ export default function Index() {
               Explore Boards
             </Link>
           </div>
+
+          <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="inline-flex items-center gap-2 p-2 rounded-lg bg-white/5">Share with your team — real-time cursors & live sync</div>
+            <div className="inline-flex items-center gap-2 p-2 rounded-lg bg-white/5">Subtle confetti on Done 🎉</div>
+          </div>
         </div>
 
         <div className="relative">
-          <div className="rounded-3xl border border-white/30 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur p-4 shadow-xl">
-            <div className="grid grid-cols-3 gap-3">
-              {["To Do","In Progress","Review"].map((c) => (
-                <div key={c} className="rounded-xl p-3 bg-white shadow border border-black/5 dark:bg-white/10 dark:border-white/10">
-                  <div className="text-xs font-medium mb-2 opacity-70">{c}</div>
-                  <div className="space-y-2">
-                    <div className="h-10 rounded-lg bg-gradient-to-r from-indigo-500/15 to-violet-600/15 border border-indigo-500/20" />
-                    <div className="h-10 rounded-lg bg-gradient-to-r from-indigo-500/15 to-violet-600/15 border border-indigo-500/20" />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <IndexPreview />
+
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <button className="rounded-full px-4 py-2 bg-white/10 backdrop-blur text-sm">Preview Live</button>
+            <Link to="/boards" className="rounded-full px-4 py-2 bg-white/6 backdrop-blur text-sm">View all boards</Link>
           </div>
         </div>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-6 flex justify-center">
+        <div className="text-xs text-muted-foreground">Built with ❤️ at Mernify Hackathon</div>
       </div>
     </div>
   );
