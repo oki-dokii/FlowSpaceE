@@ -59,6 +59,7 @@ export async function createServer(opts: { connectDB?: boolean } = {}) {
   app.use("/api/activity", activityRoutes);
   app.use("/api/teams", teamsRoutes);
   app.use("/api/invite", inviteRoutes);
+  app.use("/api/user", userRoutes);
 
   // Error handler
   app.use(errorHandler);
