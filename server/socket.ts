@@ -55,6 +55,19 @@ export function initSocket(server: http.Server) {
         const room = `board:${card?.boardId}`;
         if (room) socket.to(room).emit("card:update", card);
         socket.emit("card:update:ok", card);
+        
+        // Create activity
+        if (card) {
+          const activity = await Activity.create({
+            userId: data.updatedBy || socket.id,
+            action: `updated card "${card.title}"`,
+            entityType: 'card',
+            entityId: card._id,
+            boardId: card.boardId,
+          });
+          const populated = await Activity.findById(activity._id).populate('userId', 'name email');
+          io.emit("activity:new", populated);
+        }
       } catch (err) {
         socket.emit("error", { message: "Failed to update card" });
       }
