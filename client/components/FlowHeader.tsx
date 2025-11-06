@@ -55,16 +55,16 @@ export function FlowHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              className="hidden sm:inline-flex rounded-full border-indigo-300/50 dark:border-indigo-700/50 bg-white/40 dark:bg-white/5 backdrop-blur hover:bg-white/70 dark:hover:bg-white/10"
-              asChild
-            >
-              <Link to="/invite" className="inline-flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span>Invite Members</span>
-              </Link>
-            </Button>
+            <Link to="/invite" className="hidden sm:inline-flex">
+              <span className="relative inline-flex items-center gap-2 rounded-full p-[1.5px] bg-gradient-to-r from-indigo-500 to-violet-600">
+                <span className="rounded-full px-4 py-2 bg-white/70 dark:bg-white/10 backdrop-blur border border-white/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/15 transition">
+                  <span className="inline-flex items-center gap-2 text-sm">
+                    <Users className="h-4 w-4" />
+                    Invite Members
+                  </span>
+                </span>
+              </span>
+            </Link>
 
             <Button
               variant="ghost"
