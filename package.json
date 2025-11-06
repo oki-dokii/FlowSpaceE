@@ -24,6 +24,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@types/nodemailer": "^7.0.3",
     "bcrypt": "^6.0.0",
     "canvas-confetti": "^1.9.4",
     "cookie-parser": "^1.4.7",
@@ -31,6 +32,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3",
+    "nodemailer": "^7.0.10",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "zod": "^3.25.76"
