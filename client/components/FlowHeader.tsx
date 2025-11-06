@@ -36,11 +36,8 @@ export function FlowHeader() {
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-black/40 supports-[backdrop-filter]:bg-white/40 border-b border-white/20 dark:border-white/10">
       <div className="container mx-auto px-6">
         <div className="h-16 flex items-center justify-between">
-          <Link to="/" className="group inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 shadow-inner shadow-indigo-200/40" />
-            <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500">
-              FlowSpace
-            </span>
+          <Link to="/" className="group">
+            <Logo size="default" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1 rounded-full p-1 bg-white/50 dark:bg-white/5 border border-white/30 dark:border-white/10 shadow-sm">
