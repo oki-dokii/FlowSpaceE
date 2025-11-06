@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "0.0.0.0",
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+    allowedHosts: [
+      "realtime-sync-8.preview.emergentagent.com",
+      ".preview.emergentagent.com",
+      "localhost",
+    ],
     fs: {
       allow: [".", "./client", "./shared", "./node_modules"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**"],
