@@ -3,51 +3,109 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, Loader2, Save, Type } from "lucide-react";
-
-const users = [
-  {
-    id: "1",
-    name: "Lia",
-    color: "#8b5cf6",
-    avatar: "https://i.pravatar.cc/96?img=32",
-  },
-  {
-    id: "2",
-    name: "Ray",
-    color: "#6366f1",
-    avatar: "https://i.pravatar.cc/96?img=14",
-  },
-  {
-    id: "3",
-    name: "Ana",
-    color: "#06b6d4",
-    avatar: "https://i.pravatar.cc/96?img=24",
-  },
-];
+import { useBoard } from "@/contexts/BoardContext";
+import { getSocket } from "@/lib/socket";
+import { getNote, updateNote as updateNoteAPI } from "@/lib/api";
 
 export function NotesPanel() {
-  const [value, setValue] = useState<string>(
-    `# Project Notes\n\n- Use dnd-kit for drag & drop\n- Keep UI glassy and minimal\n- Add confetti when tasks are Done 🎉`,
-  );
+  const { currentBoard } = useBoard();
+  const [value, setValue] = useState<string>("");
   const [syncing, setSyncing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const timeoutRef = useRef<number | null>(null);
+  const socketRef = useRef<any>(null);
 
   useEffect(() => {
-    if (editing) {
+    if (!currentBoard) return;
+
+    // Load note
+    loadNote();
+
+    // Setup socket
+    const socket = getSocket();
+    socketRef.current = socket;
+
+    socket.on("note:update", (note: any) => {
+      if (note.boardId === currentBoard._id) {
+        setValue(note.content || "");
+        setSyncing(false);
+      }
+    });
+
+    socket.on("note:update:ok", () => {
+      setSyncing(false);
+      setEditing(false);
+    });
+
+    return () => {
+      socket.off("note:update");
+      socket.off("note:update:ok");
+    };
+  }, [currentBoard]);
+
+  const loadNote = async () => {
+    if (!currentBoard) return;
+    try {
+      setIsLoading(true);
+      const data = await getNote(currentBoard._id);
+      setValue(data.note?.content || `# ${currentBoard.title} Notes\n\nStart writing your notes here...`);
+    } catch (err) {
+      console.error("Failed to load note:", err);
+      setValue(`# ${currentBoard.title} Notes\n\nStart writing your notes here...`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (editing && currentBoard) {
       setSyncing(true);
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      
       timeoutRef.current = window.setTimeout(() => {
-        setSyncing(false);
-        setEditing(false);
-      }, 800);
+        // Emit via socket for real-time sync
+        const socket = socketRef.current;
+        if (socket) {
+          socket.emit("note:update", {
+            boardId: currentBoard._id,
+            content: value,
+          });
+        }
+      }, 1000); // Debounce 1 second
     }
+    
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
-  }, [value, editing]);
+  }, [value, editing, currentBoard]);
 
   const preview = useMemo(() => markdownToHtml(value), [value]);
+
+  const members = useMemo(() => {
+    if (!currentBoard?.members) return [];
+    return currentBoard.members.slice(0, 3).map((m, i) => ({
+      id: m.userId._id || m.userId,
+      name: m.userId.name || `User ${i + 1}`,
+      avatar: `https://i.pravatar.cc/96?img=${20 + i}`,
+    }));
+  }, [currentBoard]);
+
+  if (!currentBoard) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-full rounded-2xl bg-white/70 dark:bg-white/5 backdrop-blur border border-white/30 dark:border-white/10 shadow-sm overflow-hidden">
@@ -60,31 +118,38 @@ export function NotesPanel() {
           )}
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex -space-x-2">
-            {users.map((u) => (
-              <Avatar
-                key={u.id}
-                className="h-6 w-6 ring-2 ring-white/60 dark:ring-white/10"
-              >
-                <AvatarImage src={u.avatar} />
-                <AvatarFallback>{u.name[0]}</AvatarFallback>
-              </Avatar>
-            ))}
-          </div>
+          {members.length > 0 && (
+            <div className="flex -space-x-2">
+              {members.map((u) => (
+                <Avatar
+                  key={u.id}
+                  className="h-6 w-6 ring-2 ring-white/60 dark:ring-white/10"
+                >
+                  <AvatarImage src={u.avatar} />
+                  <AvatarFallback>{u.name[0]}</AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+          )}
           <Button
             size="sm"
             variant="secondary"
             className={cn(
               "rounded-full bg-white/80 dark:bg-white/10 border border-white/40 dark:border-white/10",
-              syncing ? "animate-pulse" : "",
+              syncing ? "animate-pulse" : ""
             )}
           >
             {syncing ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Syncing
+              </>
             ) : (
-              <Save className="mr-2 h-4 w-4" />
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Synced
+              </>
             )}
-            {syncing ? "Syncing" : "Synced"}
           </Button>
         </div>
       </div>
@@ -97,6 +162,7 @@ export function NotesPanel() {
             setEditing(true);
           }}
           className="resize-none p-4 bg-transparent outline-none text-sm font-mono border-r border-white/30 dark:border-white/10"
+          placeholder="Start typing your notes..."
         />
         <div
           className="p-4 overflow-auto prose prose-sm md:prose-base dark:prose-invert max-w-none"
