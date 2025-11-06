@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
-const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || "secret";
+const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || "emergent_flowspace_access_secret_" + Date.now();
 
 export const authMiddleware: RequestHandler = (req, res, next) => {
   try {
