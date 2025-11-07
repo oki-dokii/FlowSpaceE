@@ -200,38 +200,62 @@ export default function Index() {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white via-indigo-200 to-violet-200 bg-clip-text text-transparent">
+            Why Teams Love FlowSpace
+          </h2>
+          <p className="text-white/70 text-lg">Built for speed, designed for collaboration</p>
+        </div>
+        
         <motion.div
-          className="rounded-3xl bg-gradient-to-br from-indigo-500/10 via-violet-500/10 to-fuchsia-500/10 border border-white/20 backdrop-blur p-12"
-          whileHover={{ scale: 1.02 }}
+          className="rounded-3xl bg-gradient-to-br from-indigo-500/20 via-violet-500/20 to-fuchsia-500/20 border-2 border-white/30 backdrop-blur-xl p-12 shadow-2xl"
+          whileHover={{ scale: 1.01 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+          <div className="grid md:grid-cols-3 gap-12 text-center">
             <motion.div
-              whileHover={{ y: -10 }}
+              className="relative"
+              whileHover={{ y: -10, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-violet-500">
-                10ms
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 rounded-2xl blur-xl"></div>
+              <div className="relative p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+                <div className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400 mb-3">
+                  &lt;10ms
+                </div>
+                <div className="text-lg font-semibold text-white mb-2">Lightning Fast</div>
+                <div className="text-sm text-white/70">Real-time sync latency. See changes instantly as your team collaborates.</div>
               </div>
-              <div className="mt-2 text-muted-foreground">Real-time latency</div>
             </motion.div>
+            
             <motion.div
-              whileHover={{ y: -10 }}
+              className="relative"
+              whileHover={{ y: -10, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500">
-                100%
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-2xl blur-xl"></div>
+              <div className="relative p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+                <div className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 mb-3">
+                  99.9%
+                </div>
+                <div className="text-lg font-semibold text-white mb-2">Always Available</div>
+                <div className="text-sm text-white/70">Rock-solid uptime. Your boards are accessible whenever you need them.</div>
               </div>
-              <div className="mt-2 text-muted-foreground">Uptime SLA</div>
             </motion.div>
+            
             <motion.div
-              whileHover={{ y: -10 }}
+              className="relative"
+              whileHover={{ y: -10, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-pink-500">
-                ∞
+              <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-pink-500/20 rounded-2xl blur-xl"></div>
+              <div className="relative p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+                <div className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 to-pink-400 mb-3">
+                  ∞
+                </div>
+                <div className="text-lg font-semibold text-white mb-2">Unlimited Scale</div>
+                <div className="text-sm text-white/70">No limits on boards, cards, or team members. Grow without constraints.</div>
               </div>
-              <div className="mt-2 text-muted-foreground">Boards & cards</div>
             </motion.div>
           </div>
         </motion.div>
