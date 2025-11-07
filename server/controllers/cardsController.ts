@@ -55,11 +55,30 @@ export const createCard: RequestHandler = async (req, res, next) => {
 export const updateCard: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const userId = (req as any).userId;
+    
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(400).json({ message: "Invalid id" });
-    const card = await Card.findByIdAndUpdate(id, updates, { new: true });
-    if (!card) return res.status(404).json({ message: "Card not found" });
+    
+    const oldCard = await Card.findById(id);
+    const card = await Card.findByIdAndUpdate(id, req.body, { new: true });
+
+    // Log activity
+    if (card && oldCard) {
+      try {
+        const Activity = (await import('../models/Activity')).default;
+        await Activity.create({
+          userId,
+          boardId: card.boardId,
+          action: `updated card "${card.title}"`,
+          targetType: 'card',
+          targetId: card._id,
+        });
+      } catch (activityErr) {
+        console.error('Failed to log activity:', activityErr);
+      }
+    }
+
     res.json({ card });
   } catch (err) {
     next(err);
