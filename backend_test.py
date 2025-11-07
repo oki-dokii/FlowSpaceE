@@ -21,12 +21,15 @@ def load_jwt_secret():
         with open('/app/.env', 'r') as f:
             for line in f:
                 if line.startswith('JWT_ACCESS_SECRET='):
-                    return line.split('=', 1)[1].strip()
-    except:
-        pass
-    return 'emergent_flowspace_access_secret_'
+                    secret = line.split('=', 1)[1].strip()
+                    # Remove quotes if present
+                    return secret.strip('"').strip("'")
+    except Exception as e:
+        print(f"Error loading JWT secret: {e}")
+    return 'flowspace_access_secret_2024_secure'
 
 JWT_SECRET = load_jwt_secret()
+print(f"Using JWT Secret: {JWT_SECRET[:20]}...")
 
 class Colors:
     GREEN = '\033[92m'
