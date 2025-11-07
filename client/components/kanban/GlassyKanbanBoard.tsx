@@ -353,16 +353,22 @@ function GlassColumn({
 }
 
 function CardFooter({ card }: { card: CardType }) {
-  const { user } = useAuth();
+  const creator = card.createdBy || card.updatedBy;
+  const userName = creator?.name || 'Unknown';
+  const userEmail = creator?.email || '';
+  const avatarUrl = creator?.avatarUrl;
   
   return (
     <div className="flex items-center justify-between pt-2 border-t border-white/10">
-      <Avatar className="h-6 w-6 ring-2 ring-white/20">
-        <AvatarImage src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'user'}`} />
-        <AvatarFallback className="text-xs bg-gradient-to-br from-indigo-500 to-violet-500">
-          {user?.name?.substring(0, 2).toUpperCase() || 'U'}
-        </AvatarFallback>
-      </Avatar>
+      <div className="flex items-center gap-2">
+        <Avatar className="h-6 w-6 ring-2 ring-white/20">
+          <AvatarImage src={avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${userName}`} />
+          <AvatarFallback className="text-xs bg-gradient-to-br from-indigo-500 to-violet-500">
+            {userName.substring(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <span className="text-xs text-white/50">{userName.split(' ')[0]}</span>
+      </div>
       {card.dueDate && (
         <div className="flex items-center gap-1 text-xs text-white/50">
           <Calendar className="h-3 w-3" />
