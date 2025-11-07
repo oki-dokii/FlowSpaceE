@@ -127,7 +127,7 @@ export function NotesPanel() {
   }
 
   return (
-    <div className="relative rounded-2xl bg-white/70 dark:bg-white/5 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-xl overflow-hidden h-[calc(100vh-200px)] flex flex-col">
+    <div className="relative rounded-2xl bg-white/90 dark:bg-white/5 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-xl overflow-hidden h-[600px] flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/30 dark:border-white/10 bg-gradient-to-r from-white/70 to-white/30 dark:from-white/5 dark:to-white/0 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Type className="h-4 w-4 text-indigo-500" />
