@@ -261,7 +261,7 @@ function FeatureCard({
 }) {
   return (
     <motion.div
-      className="group relative rounded-2xl p-6 bg-white/60 dark:bg-white/5 backdrop-blur border border-white/30 dark:border-white/10"
+      className="group relative rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 border-white/20 shadow-xl"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -270,7 +270,7 @@ function FeatureCard({
         scale: 1.05,
         rotateY: 5,
         rotateX: 5,
-        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
       }}
       style={{
         transformStyle: "preserve-3d",
@@ -278,26 +278,26 @@ function FeatureCard({
       }}
     >
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"
+        className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-5 rounded-2xl group-hover:opacity-20 transition-opacity`}
         animate={{
-          opacity: [0, 0.5, 0],
+          opacity: [0.05, 0.15, 0.05],
         }}
         transition={{
-          duration: 2,
+          duration: 3,
           ease: "easeInOut",
           repeat: Infinity,
         }}
       />
       <div className="relative" style={{ transform: "translateZ(20px)" }}>
         <motion.div
-          className={`inline-flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br ${gradient} text-white mb-4 shadow-lg`}
-          whileHover={{ rotate: 360 }}
+          className={`inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br ${gradient} text-white mb-4 shadow-lg`}
+          whileHover={{ rotate: 360, scale: 1.1 }}
           transition={{ duration: 0.6 }}
         >
           {icon}
         </motion.div>
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+        <h3 className="text-xl font-bold mb-3 text-white">{title}</h3>
+        <p className="text-sm text-white/80 leading-relaxed font-medium">{description}</p>
       </div>
     </motion.div>
   );
