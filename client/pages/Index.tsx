@@ -237,45 +237,6 @@ export default function Index() {
         </motion.div>
       </motion.div>
 
-      {/* CTA Section */}
-      <motion.div
-        className="container mx-auto px-6 py-20"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="text-center space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Ready to transform your workflow?
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Join teams who are already using FlowSpace to ship faster and collaborate better.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center pt-4">
-            <Link to="/board">
-              <motion.button
-                className="group inline-flex items-center gap-2 rounded-full px-8 py-4 bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg"
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(99, 102, 241, 0.4)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Start Free Trial
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </Link>
-            <Link to="/boards">
-              <motion.button
-                className="inline-flex items-center gap-2 rounded-full px-8 py-4 border border-white/40 dark:border-white/10 bg-white/60 dark:bg-white/10 backdrop-blur"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View Demo
-              </motion.button>
-            </Link>
-          </div>
-        </div>
-      </motion.div>
-
       <div className="absolute inset-x-0 bottom-6 flex justify-center">
         <div className="text-xs text-muted-foreground">
           Built with ❤️ at Mernify Hackathon
