@@ -339,38 +339,38 @@ function KanbanCard({ card }: { card: CardType }) {
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       className={cn(
-        "rounded-xl p-3 bg-white shadow border border-black/5 will-change-transform cursor-grab touch-none",
-        "hover:shadow-xl hover:ring-2 hover:ring-primary/30 hover:border-primary/20",
+        "rounded-lg p-3 bg-white shadow-md border border-black/5 will-change-transform cursor-grab touch-none transition-all",
+        "hover:shadow-lg hover:ring-2 hover:ring-primary/30 hover:border-primary/20 hover:-translate-y-0.5",
         "dark:bg-white/10 dark:border-white/10",
         isDragging && "opacity-50 cursor-grabbing scale-105 shadow-2xl ring-4 ring-primary/40"
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="text-sm font-medium text-foreground/90 flex-1">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="text-sm font-semibold text-foreground flex-1 leading-snug">
           {card.title}
         </div>
         {card.tags && card.tags.length > 0 && (
-          <Badge className="bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 text-xs">
+          <Badge className="bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 text-xs px-1.5 py-0 flex-shrink-0">
             {card.tags[0]}
           </Badge>
         )}
       </div>
       {card.description && (
-        <p className="mt-2 text-xs text-muted-foreground line-clamp-2">
+        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
           {card.description}
         </p>
       )}
-      <div className="mt-3 flex items-center justify-between">
+      <div className="mt-3 flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/10">
         <div className="flex items-center gap-2">
-          <Avatar className="h-6 w-6">
+          <Avatar className="h-5 w-5 ring-2 ring-white/50">
             <AvatarImage src={`https://i.pravatar.cc/96?img=${Math.floor(Math.random() * 50)}`} />
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarFallback className="text-xs">U</AvatarFallback>
           </Avatar>
         </div>
         {card.dueDate && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Calendar className="h-3.5 w-3.5" />{" "}
-            {new Date(card.dueDate).toLocaleDateString()}
+            <Calendar className="h-3 w-3" />
+            {new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </div>
         )}
       </div>
