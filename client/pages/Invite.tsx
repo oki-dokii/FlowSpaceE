@@ -43,11 +43,18 @@ export default function Invite() {
     try {
       setSending(true);
       
+      // Get JWT token for authentication
+      const token = getAccessToken();
+      if (!token) {
+        throw new Error('Missing authorization');
+      }
+      
       // Use relative URL to work in both dev and production (through proxy)
       const response = await fetch('/api/invite', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         credentials: 'include',
         body: JSON.stringify({
