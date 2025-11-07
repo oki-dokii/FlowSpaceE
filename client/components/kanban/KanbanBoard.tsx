@@ -173,7 +173,6 @@ export default function KanbanBoard() {
     if (!currentBoard || !user) return;
     
     const newCardData = {
-      boardId: currentBoard._id,
       columnId,
       title: "New Task",
       description: "",
@@ -182,8 +181,8 @@ export default function KanbanBoard() {
     };
 
     try {
-      // Create card via API
-      const response = await createCard(newCardData);
+      // Create card via API with correct parameters
+      const response = await createCard(currentBoard._id, newCardData);
       
       // Also emit via socket for real-time update to other users
       const socket = getSocket();
