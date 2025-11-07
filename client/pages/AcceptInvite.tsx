@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Loader2, CheckCircle2, XCircle, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, getAccessToken } from '@/contexts/AuthContext';
 
 export default function AcceptInvite() {
   const { token } = useParams<{ token: string }>();
