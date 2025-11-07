@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for FlowSpace Invite & Collaboration System
-Tests invite creation, acceptance, and board member permissions
+Backend API Testing for FlowSpace Collaboration Features
+Tests avatars, activity tracking, and user collaboration
 """
 
 import requests
