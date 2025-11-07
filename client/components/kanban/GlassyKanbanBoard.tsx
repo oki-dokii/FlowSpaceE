@@ -278,7 +278,7 @@ function GlassColumn({
     <div
       ref={setNodeRef}
       className={cn(
-        'relative rounded-2xl p-4 h-[600px] flex flex-col',
+        'relative rounded-2xl p-4 aspect-[3/4] flex flex-col',
         'bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl',
         'border shadow-2xl transition-all duration-500',
         'hover:shadow-3xl hover:scale-[1.02]',
