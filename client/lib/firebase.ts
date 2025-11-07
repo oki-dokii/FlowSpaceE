@@ -3,13 +3,13 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCPMCIM0y9xbY3Z8Ayd3xScdUx_uve5ckY",
-  authDomain: "smart-clinic-d59c5.firebaseapp.com",
-  projectId: "smart-clinic-d59c5",
-  storageBucket: "smart-clinic-d59c5.firebasestorage.app",
-  messagingSenderId: "138870860957",
-  appId: "1:138870860957:web:ce4c44239626038d917874",
-  measurementId: "G-YNT8K8D9KP"
+  apiKey: "AIzaSyAgApQKVhP2AtMZijLypzfhZozRLWZulTQ",
+  authDomain: "flowspace-60e2b.firebaseapp.com",
+  projectId: "flowspace-60e2b",
+  storageBucket: "flowspace-60e2b.firebasestorage.app",
+  messagingSenderId: "1094258189185",
+  appId: "1:1094258189185:web:436ba11bdd08af136a7e80",
+  measurementId: "G-SEPVSSGBHB"
 };
 
 const app = initializeApp(firebaseConfig);
