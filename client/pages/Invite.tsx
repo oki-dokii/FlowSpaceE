@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,11 +10,19 @@ import { useBoard } from '@/contexts/BoardContext';
 export default function Invite() {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<'editor' | 'viewer'>('editor');
+  const [selectedBoardId, setSelectedBoardId] = useState('');
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [inviteLink, setInviteLink] = useState('');
   const { toast } = useToast();
-  const { currentBoard } = useBoard();
+  const { currentBoard, boards } = useBoard();
+
+  // Set default board when boards load
+  useEffect(() => {
+    if (boards && boards.length > 0 && !selectedBoardId) {
+      setSelectedBoardId(currentBoard?._id || boards[0]._id);
+    }
+  }, [boards, currentBoard, selectedBoardId]);
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
