@@ -40,11 +40,6 @@ export const createCard: RequestHandler = async (req, res, next) => {
 
     // Log activity
     try {
-      console.log('[DEBUG] Creating activity for card creation');
-      console.log('[DEBUG] userId:', userId);
-      console.log('[DEBUG] boardId:', boardId);
-      console.log('[DEBUG] card._id:', card._id);
-      
       const Activity = (await import('../models/Activity')).Activity;
       const activity = await Activity.create({
         userId,
@@ -53,8 +48,6 @@ export const createCard: RequestHandler = async (req, res, next) => {
         entityType: 'card',
         entityId: card._id,
       });
-      
-      console.log('[DEBUG] Activity created:', activity._id);
       
       // Populate user data before emitting
       const populated = await Activity.findById(activity._id).populate('userId', 'name email');
@@ -65,12 +58,6 @@ export const createCard: RequestHandler = async (req, res, next) => {
       }
     } catch (activityErr) {
       console.error('Failed to log activity:', activityErr);
-      console.error('Activity error details:', {
-        userId,
-        boardId,
-        cardId: card._id,
-        error: activityErr
-      });
     }
 
     res.status(201).json({ card });
