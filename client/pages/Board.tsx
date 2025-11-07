@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NotesPanel } from "@/components/notes/NotesPanel";
 import { Button } from "@/components/ui/button";
-import { Plus, Users } from "lucide-react";
+import { Plus, Users, Loader2 } from "lucide-react";
 import FloatingBackground from "@/components/visuals/FloatingBackground";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createBoard } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useBoard } from "@/contexts/BoardContext";
 import confetti from "canvas-confetti";
 
 export default function Board() {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isLoading: boardLoading } = useBoard();
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
