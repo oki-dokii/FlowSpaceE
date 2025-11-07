@@ -8,6 +8,7 @@ import { useBoard } from "@/contexts/BoardContext";
 import { getSocket } from "@/lib/socket";
 import { getNote, updateNote as updateNoteAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import RichTextEditor from "@/components/RichTextEditor";
 
 export function NotesPanel() {
   const { currentBoard } = useBoard();
