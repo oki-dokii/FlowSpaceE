@@ -75,16 +75,18 @@ export function FlowHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link to="/invite" className="hidden sm:inline-flex">
-              <span className="relative inline-flex items-center gap-2 rounded-full p-[1.5px] bg-gradient-to-r from-indigo-500 to-violet-600">
-                <span className="rounded-full px-4 py-2 bg-white/70 dark:bg-white/10 backdrop-blur border border-white/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/15 transition">
-                  <span className="inline-flex items-center gap-2 text-sm">
-                    <Users className="h-4 w-4" />
-                    Invite Members
+            {isAuthenticated && (
+              <Link to="/invite" className="hidden sm:inline-flex">
+                <span className="relative inline-flex items-center gap-2 rounded-full p-[1.5px] bg-gradient-to-r from-indigo-500 to-violet-600">
+                  <span className="rounded-full px-4 py-2 bg-white/70 dark:bg-white/10 backdrop-blur border border-white/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/15 transition">
+                    <span className="inline-flex items-center gap-2 text-sm">
+                      <Users className="h-4 w-4" />
+                      Invite Members
+                    </span>
                   </span>
                 </span>
-              </span>
-            </Link>
+              </Link>
+            )}
 
             <Button
               variant="ghost"
@@ -97,43 +99,56 @@ export function FlowHeader() {
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="rounded-full p-0.5 bg-white/60 dark:bg-white/10 border border-white/30 dark:border-white/10 hover:bg-white/80 transition shadow">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage
-                      src="https://i.pravatar.cc/100?img=12"
-                      alt="Soham"
-                    />
-                    <AvatarFallback>SO</AvatarFallback>
-                  </Avatar>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuLabel className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src="https://i.pravatar.cc/100?img=12" />
-                    <AvatarFallback>SO</AvatarFallback>
-                  </Avatar>
-                  Soham
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/profile" className="flex items-center gap-2">
-                    <User2 className="h-4 w-4" /> Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings" className="flex items-center gap-2">
-                    <Settings className="h-4 w-4" /> Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive flex items-center gap-2">
-                  <LogOut className="h-4 w-4" /> Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="rounded-full p-0.5 bg-white/60 dark:bg-white/10 border border-white/30 dark:border-white/10 hover:bg-white/80 transition shadow">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}`}
+                        alt={user?.name || "User"}
+                      />
+                      <AvatarFallback>
+                        {user?.name?.substring(0, 2).toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6">
+                      <AvatarImage src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}`} />
+                      <AvatarFallback>
+                        {user?.name?.substring(0, 2).toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    {user?.name || "User"}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center gap-2">
+                      <User2 className="h-4 w-4" /> Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="flex items-center gap-2">
+                      <SettingsIcon className="h-4 w-4" /> Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive flex items-center gap-2">
+                    <LogOut className="h-4 w-4" /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/login">
+                <Button className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
