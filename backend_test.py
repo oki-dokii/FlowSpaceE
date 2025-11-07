@@ -327,6 +327,10 @@ class FlowSpaceBackendTester:
                     
                     print(f"  Total activities retrieved: {len(activities)}")
                     
+                    # Debug: Print all activities
+                    for i, act in enumerate(activities[:5]):
+                        print(f"    Activity {i+1}: {act.get('action')} (entityType: {act.get('entityType')}, entityId: {act.get('entityId')})")
+                    
                     # Debug: Print recent card activities
                     card_activities = [a for a in activities if a.get('entityType') == 'card']
                     print(f"  Card activities found: {len(card_activities)}")
