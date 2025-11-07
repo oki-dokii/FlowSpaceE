@@ -402,13 +402,14 @@ function GlassCard({ card, onEdit }: { card: CardType; onEdit: () => void }) {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      whileHover={{ scale: 1.03, y: -4 }}
+      whileHover={{ scale: 1.02, y: -2 }}
       className={cn(
-        'group relative rounded-xl p-4',
+        'group relative rounded-xl p-4 aspect-square',
         'bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md',
         'border border-white/10 shadow-lg',
         'hover:shadow-2xl hover:border-white/20',
         'transition-all duration-300',
+        'w-full',
         isDragging && 'opacity-50 scale-105 rotate-2'
       )}
     >
@@ -418,39 +419,67 @@ function GlassCard({ card, onEdit }: { card: CardType; onEdit: () => void }) {
       {/* Drag Handle */}
       <div {...listeners} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
       
-      <div className="relative z-10 space-y-3">
-        <div className="flex items-start justify-between gap-2">
-          <h4 className="text-sm font-bold text-white/90 line-clamp-2 flex-1">
-            {card.title}
-          </h4>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleEditClick}
-            className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 p-0 hover:bg-indigo-500/20 relative z-20"
-          >
-            <Edit className="h-3.5 w-3.5 text-indigo-300" />
-          </Button>
+      {/* 2x2 Grid Layout */}
+      <div className="relative z-10 h-full flex flex-col">
+        {/* Top Half: 2 components side by side */}
+        <div className="flex-1 grid grid-cols-2 gap-3 pb-3 border-b border-white/10">
+          {/* Top Left: Title & Edit Button */}
+          <div className="flex flex-col justify-start">
+            <h4 className="text-sm font-bold text-white/90 line-clamp-3 leading-tight">
+              {card.title}
+            </h4>
+          </div>
+          
+          {/* Top Right: Tags & Edit */}
+          <div className="flex flex-col items-end justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleEditClick}
+              className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 p-0 hover:bg-indigo-500/20 relative z-20"
+            >
+              <Edit className="h-3.5 w-3.5 text-indigo-300" />
+            </Button>
+            {card.tags && card.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 justify-end">
+                {card.tags.slice(0, 1).map((tag, i) => (
+                  <Badge
+                    key={i}
+                    className="text-xs px-1.5 py-0 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+                {card.tags.length > 1 && (
+                  <Badge className="text-xs px-1.5 py-0 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                    +{card.tags.length - 1}
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        {card.description && (
-          <p className="text-xs text-white/60 line-clamp-2">{card.description}</p>
-        )}
-
-        {card.tags && card.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {card.tags.slice(0, 2).map((tag, i) => (
-              <Badge
-                key={i}
-                className="text-xs px-2 py-0 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30"
-              >
-                {tag}
-              </Badge>
-            ))}
+        {/* Bottom Half: 2 components side by side */}
+        <div className="flex-1 grid grid-cols-2 gap-3 pt-3">
+          {/* Bottom Left: Description */}
+          <div className="flex items-center">
+            {card.description && (
+              <p className="text-xs text-white/60 line-clamp-3 leading-tight">{card.description}</p>
+            )}
           </div>
-        )}
-
-        <CardFooter card={card} />
+          
+          {/* Bottom Right: User Avatar & Date */}
+          <div className="flex flex-col justify-end items-end gap-2">
+            {card.dueDate && (
+              <div className="flex items-center gap-1 text-xs text-white/50">
+                <Calendar className="h-3 w-3" />
+                <span>{new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+              </div>
+            )}
+            <CardFooter card={card} />
+          </div>
+        </div>
       </div>
     </motion.div>
   );
