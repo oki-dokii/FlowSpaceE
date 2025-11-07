@@ -444,101 +444,73 @@ class FlowSpaceInviteTester:
             traceback.print_exc()
             return False
     
-    def test_activity_logging(self):
-        """Test GET /api/activity and verify card activities are logged"""
-        print(f"\n{Colors.BOLD}Test 4: Activity Logging{Colors.RESET}")
+    def test_member_board_access(self):
+        """Test board member can access board and see it in their board list"""
+        print(f"\n{Colors.BOLD}Test 4: Board Member Access{Colors.RESET}")
         
-        # Wait a bit for activities to be logged
-        time.sleep(2)
-        
-        url = f"{self.base_url}/api/activity"
-        headers = {'Authorization': f'Bearer {self.token}'}
+        # Test 4a: GET /api/boards - verify member sees boards they're a member of
+        url = f"{self.base_url}/api/boards"
+        headers = {'Authorization': f'Bearer {self.invitee_token}'}
         
         try:
             response = requests.get(url, headers=headers)
             
             if response.status_code == 200:
                 data = response.json()
-                if 'activities' in data:
-                    activities = data['activities']
+                
+                if 'boards' in data:
+                    boards = data['boards']
+                    board_ids = [b['_id'] for b in boards]
+                    can_see_board = self.board_id in board_ids
                     
-                    print(f"  Total activities retrieved: {len(activities)}")
-                    
-                    # Debug: Print all activities
-                    for i, act in enumerate(activities[:5]):
-                        print(f"    Activity {i+1}: {act.get('action')} (entityType: {act.get('entityType')}, entityId: {act.get('entityId')})")
-                    
-                    # Debug: Print recent card activities
-                    card_activities = [a for a in activities if a.get('entityType') == 'card']
-                    print(f"  Card activities found: {len(card_activities)}")
-                    
-                    # Check for card creation activity
-                    create_activity = None
-                    update_activity = None
-                    
-                    for activity in activities:
-                        if activity.get('entityType') == 'card' and activity.get('entityId') == self.card_id:
-                            if 'created' in activity.get('action', '').lower():
-                                create_activity = activity
-                            elif 'updated' in activity.get('action', '').lower():
-                                update_activity = activity
-                    
-                    # Verify create activity
-                    if create_activity:
-                        fields_ok = (
-                            create_activity.get('entityType') == 'card' and
-                            create_activity.get('entityId') == self.card_id and
-                            create_activity.get('boardId') == self.board_id and
-                            'userId' in create_activity
-                        )
-                        self.log_test(
-                            "Activity Logging - Card Creation",
-                            fields_ok,
-                            f"Activity logged with correct fields: entityType={create_activity.get('entityType')}, entityId={create_activity.get('entityId')}"
-                        )
-                        
-                        # Check if user data is populated
-                        user_populated = isinstance(create_activity.get('userId'), dict) and 'name' in create_activity.get('userId', {})
-                        self.log_test(
-                            "Activity User Population",
-                            user_populated,
-                            "User data populated in activity" if user_populated else "User data not populated"
-                        )
-                    else:
-                        self.log_test(
-                            "Activity Logging - Card Creation",
-                            False,
-                            "Card creation activity not found in activity feed"
-                        )
-                    
-                    # Verify update activity
-                    if update_activity:
-                        self.log_test(
-                            "Activity Logging - Card Update",
-                            True,
-                            "Card update activity logged successfully"
-                        )
-                    else:
-                        self.log_test(
-                            "Activity Logging - Card Update",
-                            False,
-                            "Card update activity not found in activity feed"
-                        )
-                    
-                    return create_activity is not None
+                    self.log_test(
+                        "Member Board List Access",
+                        can_see_board,
+                        f"Member can see {len(boards)} board(s), including test board" if can_see_board else f"Member cannot see test board. Boards: {board_ids}"
+                    )
                 else:
-                    self.log_test("Activity Feed API", False, "Response missing 'activities' field")
+                    self.log_test("Member Board List Access", False, "Response missing 'boards' field")
                     return False
             else:
                 self.log_test(
-                    "Activity Feed API",
+                    "Member Board List Access",
+                    False,
+                    f"Expected status 200, got {response.status_code}: {response.text}"
+                )
+                return False
+            
+            # Test 4b: GET /api/boards/:id - verify member can access board details
+            url = f"{self.base_url}/api/boards/{self.board_id}"
+            response = requests.get(url, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if 'board' in data:
+                    board = data['board']
+                    correct_board = board['_id'] == self.board_id
+                    
+                    self.log_test(
+                        "Member Board Details Access",
+                        correct_board,
+                        f"Member can access board details: {board.get('title')}" if correct_board else "Wrong board returned"
+                    )
+                    return correct_board
+                else:
+                    self.log_test("Member Board Details Access", False, "Response missing 'board' field")
+                    return False
+            else:
+                self.log_test(
+                    "Member Board Details Access",
                     False,
                     f"Expected status 200, got {response.status_code}: {response.text}"
                 )
                 return False
                 
         except Exception as e:
-            self.log_test("Activity Feed API", False, f"Exception: {str(e)}")
+            self.log_test("Member Board Access", False, f"Exception: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def test_card_deletion(self):
