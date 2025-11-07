@@ -1,5 +1,7 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 console.log('Testing SMTP Configuration...\n');
 console.log('SMTP_EMAIL:', process.env.SMTP_EMAIL);
@@ -18,6 +20,7 @@ transporter.verify(function (error, success) {
   if (error) {
     console.log('\n❌ SMTP Connection Failed:');
     console.log(error);
+    process.exit(1);
   } else {
     console.log('\n✅ SMTP Server is ready to take our messages');
     
@@ -37,10 +40,12 @@ transporter.verify(function (error, success) {
       if (err) {
         console.log('\n❌ Email Sending Failed:');
         console.log(err);
+        process.exit(1);
       } else {
         console.log('\n✅ Email sent successfully!');
         console.log('Message ID:', info.messageId);
         console.log('Response:', info.response);
+        process.exit(0);
       }
     });
   }
