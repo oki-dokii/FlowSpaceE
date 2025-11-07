@@ -411,18 +411,7 @@ function GlassCard({ card, onEdit }: { card: CardType; onEdit: () => void }) {
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2 border-t border-white/10">
-          <Avatar className="h-6 w-6 ring-2 ring-white/20">
-            <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${card._id}`} />
-            <AvatarFallback className="text-xs bg-gradient-to-br from-indigo-500 to-violet-500">U</AvatarFallback>
-          </Avatar>
-          {card.dueDate && (
-            <div className="flex items-center gap-1 text-xs text-white/50">
-              <Calendar className="h-3 w-3" />
-              {new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </div>
-          )}
-        </div>
+        <CardFooter card={card} />
       </div>
     </motion.div>
   );
