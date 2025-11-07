@@ -39,6 +39,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         const firstBoard = data.boards[0];
         const boardData = await getBoard(firstBoard._id);
         setCurrentBoard(boardData.board);
+        setCards(boardData.board.cards || []);
         
         // Join socket room for this board
         const socket = getSocket();
