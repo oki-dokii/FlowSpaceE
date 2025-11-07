@@ -16,6 +16,7 @@ export default function Invite() {
   const [inviteLink, setInviteLink] = useState('');
   const { toast } = useToast();
   const { currentBoard, boards } = useBoard();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   // Set default board when boards load
   useEffect(() => {
