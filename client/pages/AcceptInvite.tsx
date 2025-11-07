@@ -38,11 +38,18 @@ export default function AcceptInvite() {
     try {
       setStatus('loading');
       
+      // Get JWT token for authentication
+      const authToken = getAccessToken();
+      if (!authToken) {
+        throw new Error('Please sign in to accept the invite');
+      }
+      
       // Use relative URL to work in both dev and production (through proxy)
       const response = await fetch(`/api/invite/${token}/accept`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
         credentials: 'include',
       });
