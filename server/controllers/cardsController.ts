@@ -122,7 +122,7 @@ export const updateCard: RequestHandler = async (req, res, next) => {
       }
     }
 
-    res.json({ card });
+    res.json({ card: populatedCard || card });
   } catch (err) {
     next(err);
   }
