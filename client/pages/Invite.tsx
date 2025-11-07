@@ -19,6 +19,7 @@ export default function Invite() {
   const { toast } = useToast();
   const { currentBoard, boards } = useBoard();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
 
   // Set default board when boards load
   useEffect(() => {
