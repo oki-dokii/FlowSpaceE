@@ -355,34 +355,34 @@ function KanbanCard({ card }: { card: CardType }) {
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       className={cn(
-        "rounded-lg p-3 bg-white shadow-md border border-black/5 will-change-transform cursor-grab touch-none transition-all",
-        "hover:shadow-lg hover:ring-2 hover:ring-primary/30 hover:border-primary/20 hover:-translate-y-0.5",
+        "rounded-xl p-4 bg-white shadow-md border border-black/5 will-change-transform cursor-grab touch-none transition-all aspect-square flex flex-col justify-between",
+        "hover:shadow-xl hover:ring-2 hover:ring-primary/30 hover:border-primary/20 hover:-translate-y-1",
         "dark:bg-white/10 dark:border-white/10",
         isDragging && "opacity-50 cursor-grabbing scale-105 shadow-2xl ring-4 ring-primary/40"
       )}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <div className="text-sm font-semibold text-foreground flex-1 leading-snug">
-          {card.title}
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <div className="text-sm font-bold text-foreground flex-1 leading-tight line-clamp-2">
+            {card.title}
+          </div>
+          {card.tags && card.tags.length > 0 && (
+            <Badge className="bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 text-xs px-2 py-0.5 flex-shrink-0">
+              {card.tags[0]}
+            </Badge>
+          )}
         </div>
-        {card.tags && card.tags.length > 0 && (
-          <Badge className="bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 text-xs px-1.5 py-0 flex-shrink-0">
-            {card.tags[0]}
-          </Badge>
+        {card.description && (
+          <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed flex-1">
+            {card.description}
+          </p>
         )}
       </div>
-      {card.description && (
-        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-          {card.description}
-        </p>
-      )}
-      <div className="mt-3 flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/10">
-        <div className="flex items-center gap-2">
-          <Avatar className="h-5 w-5 ring-2 ring-white/50">
-            <AvatarImage src={`https://i.pravatar.cc/96?img=${Math.floor(Math.random() * 50)}`} />
-            <AvatarFallback className="text-xs">U</AvatarFallback>
-          </Avatar>
-        </div>
+      <div className="mt-auto pt-3 flex items-center justify-between border-t border-black/5 dark:border-white/10">
+        <Avatar className="h-6 w-6 ring-2 ring-white/50">
+          <AvatarImage src={`https://i.pravatar.cc/96?img=${Math.floor(Math.random() * 50)}`} />
+          <AvatarFallback className="text-xs">U</AvatarFallback>
+        </Avatar>
         {card.dueDate && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Calendar className="h-3 w-3" />
