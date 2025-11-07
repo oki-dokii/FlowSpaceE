@@ -18,6 +18,7 @@ import Invite from "./pages/Invite";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotesEditor from "./pages/NotesEditor";
+import Login from "./pages/Login";
 import { FlowHeader } from "./components/FlowHeader";
 import { FlowFooter } from "./components/FlowFooter";
 import { ThemeProvider } from "./components/theme/ThemeProvider";
