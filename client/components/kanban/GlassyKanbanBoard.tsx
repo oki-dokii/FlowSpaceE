@@ -289,23 +289,25 @@ function GlassColumn({
       ref={setNodeRef}
       className={cn(
         'relative rounded-2xl p-4 h-[450px] flex flex-col',
-        'bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl',
-        'border shadow-2xl transition-all duration-500',
+        'bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl',
+        'border-2 shadow-2xl transition-all duration-500',
         'hover:shadow-3xl hover:scale-[1.02]',
         borderColor,
         glowColor
       )}
     >
       {/* Glass shimmer effect */}
-      <div className={cn('absolute inset-0 rounded-2xl bg-gradient-to-br opacity-30', gradient)} />
+      <div className={cn('absolute inset-0 rounded-2xl bg-gradient-to-br opacity-50', gradient)} />
       
       {/* Header */}
-      <div className="relative z-10 flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+      <div className="relative z-10 flex items-center justify-between mb-4 pb-3 border-b-2 border-white/20">
         <div className="flex items-center gap-2">
-          <Icon className={cn('h-5 w-5', iconColor)} />
-          <h3 className="font-bold text-white/90">{title}</h3>
+          <div className={cn('p-1.5 rounded-lg', badgeColor)}>
+            <Icon className={cn('h-5 w-5', iconColor)} />
+          </div>
+          <h3 className="font-bold text-lg text-white">{title}</h3>
         </div>
-        <Badge className={cn('px-2 py-0.5 border', badgeColor)}>
+        <Badge className={cn('px-2.5 py-1 border font-semibold text-sm', badgeColor)}>
           {items.length}
         </Badge>
       </div>
