@@ -90,10 +90,12 @@ export default function RichTextEditor({
           background: rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(10px);
           border: 2px solid rgba(255, 255, 255, 0.2);
-          padding: 10px 12px;
+          padding: 12px;
           display: flex;
           flex-wrap: wrap;
           gap: 4px;
+          position: relative;
+          z-index: 10;
         }
         
         .rich-text-editor .ql-container {
@@ -104,24 +106,66 @@ export default function RichTextEditor({
           background: rgba(255, 255, 255, 0.05);
         }
         
-        .rich-text-editor .ql-toolbar button {
-          width: 30px !important;
-          height: 30px !important;
-          padding: 5px !important;
+        .rich-text-editor .ql-toolbar button,
+        .rich-text-editor .ql-toolbar .ql-picker {
+          width: auto !important;
+          min-width: 32px !important;
+          height: 32px !important;
+          padding: 6px !important;
           border-radius: 6px;
+          cursor: pointer !important;
+          pointer-events: auto !important;
+          position: relative;
+          z-index: 20;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.2s;
         }
         
-        .rich-text-editor .ql-toolbar button:hover {
-          background: rgba(99, 102, 241, 0.08);
+        .rich-text-editor .ql-toolbar button:hover,
+        .rich-text-editor .ql-toolbar .ql-picker:hover {
+          background: rgba(99, 102, 241, 0.2) !important;
+          border-color: rgba(99, 102, 241, 0.4);
+          transform: scale(1.05);
         }
         
         .rich-text-editor .ql-toolbar button.ql-active {
-          background: rgba(99, 102, 241, 0.15);
+          background: rgba(99, 102, 241, 0.3) !important;
+          border-color: rgb(99, 102, 241);
           color: rgb(99, 102, 241);
         }
         
         .rich-text-editor .ql-picker {
           font-size: 14px;
+          color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .rich-text-editor .ql-picker-label {
+          padding: 2px 8px !important;
+          pointer-events: auto !important;
+          cursor: pointer !important;
+        }
+        
+        .rich-text-editor .ql-picker-options {
+          background: rgba(30, 30, 30, 0.98) !important;
+          border: 2px solid rgba(99, 102, 241, 0.4) !important;
+          border-radius: 8px;
+          padding: 8px;
+          max-height: 300px;
+          overflow-y: auto;
+          backdrop-filter: blur(10px);
+          z-index: 1000 !important;
+        }
+        
+        .rich-text-editor .ql-picker-item {
+          padding: 8px 12px !important;
+          color: rgba(255, 255, 255, 0.9) !important;
+          cursor: pointer !important;
+          border-radius: 4px;
+        }
+        
+        .rich-text-editor .ql-picker-item:hover {
+          background: rgba(99, 102, 241, 0.2) !important;
         }
         
         .rich-text-editor .ql-editor.ql-blank::before {
