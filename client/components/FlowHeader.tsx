@@ -28,6 +28,17 @@ import { firebaseSignOut } from "@/lib/firebase";
 export function FlowHeader() {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await firebaseSignOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   const tabs = [
     { to: "/boards", label: "Boards", icon: LayoutGrid },
