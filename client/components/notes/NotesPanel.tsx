@@ -127,11 +127,11 @@ export function NotesPanel() {
   }
 
   return (
-    <div className="relative rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden min-h-[700px] flex flex-col">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 flex-shrink-0">
+    <div className="relative rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 border-white/20 shadow-2xl overflow-hidden min-h-[700px] flex flex-col">
+      <div className="flex items-center justify-between px-4 py-3 border-b-2 border-white/20 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <Type className="h-4 w-4 text-indigo-400" />
-          <span className="text-sm font-medium text-white/90">Shared Notes</span>
+          <Type className="h-5 w-5 text-indigo-300" />
+          <span className="text-sm font-semibold text-white">Shared Notes</span>
           {editing && (
             <span className="text-xs text-muted-foreground">editing…</span>
           )}
