@@ -138,7 +138,6 @@ export const deleteCard: RequestHandler = async (req, res, next) => {
     // Log activity
     if (card) {
       try {
-        const Activity = (await import('../models/Activity')).Activity;
         const activity = await Activity.create({
           userId,
           boardId: card.boardId,
