@@ -77,7 +77,8 @@ export const updateCard: RequestHandler = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid id" });
     
     const oldCard = await Card.findById(id);
-    const card = await Card.findByIdAndUpdate(id, req.body, { new: true });
+    const updateData = { ...req.body, updatedBy: userId };
+    const card = await Card.findByIdAndUpdate(id, updateData, { new: true });
 
     // Broadcast card update to all clients
     const io = (req as any).app.get('io');
