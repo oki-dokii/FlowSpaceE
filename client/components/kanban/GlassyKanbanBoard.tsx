@@ -207,7 +207,7 @@ export default function GlassyKanbanBoard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <AnimatePresence>
             {columns.map((col, index) => {
-              const config = columnConfig[col.id as keyof typeof columnConfig] || columnConfig['todo'];
+              const config = getColumnConfig(col.title);
               return (
                 <motion.div
                   key={col.id}
@@ -217,7 +217,7 @@ export default function GlassyKanbanBoard() {
                 >
                   <GlassColumn
                     id={col.id}
-                    title={config.title}
+                    title={col.title}
                     icon={config.icon}
                     gradient={config.gradient}
                     borderColor={config.borderColor}
