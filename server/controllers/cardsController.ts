@@ -92,7 +92,6 @@ export const updateCard: RequestHandler = async (req, res, next) => {
     // Log activity
     if (card && oldCard) {
       try {
-        const Activity = (await import('../models/Activity')).Activity;
         const activity = await Activity.create({
           userId,
           boardId: card.boardId,
