@@ -91,38 +91,48 @@ export default function Board() {
     <div
       ref={ref}
       onMouseMove={onMove}
-      className="relative container mx-auto px-6 py-8 overflow-hidden pb-24"
+      className="relative min-h-screen"
     >
       <FloatingBackground />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-6">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-2xl p-4 bg-white/60 dark:bg-white/5 backdrop-blur border border-white/20 shadow-inner">
-            <KanbanBoard />
+      <div className="container mx-auto px-4 sm:px-6 py-6 pb-32">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* Kanban Board - Takes 2/3 width on large screens */}
+          <div className="xl:col-span-2">
+            <div className="rounded-2xl p-4 sm:p-6 bg-white/60 dark:bg-white/5 backdrop-blur-lg border border-white/20 shadow-xl">
+              <KanbanBoard />
+            </div>
           </div>
-        </div>
-        <div className="lg:col-span-1">
-          <NotesPanel />
+
+          {/* Notes Panel - Takes 1/3 width on large screens */}
+          <div className="xl:col-span-1">
+            <div className="sticky top-6">
+              <NotesPanel />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-8 right-8 flex flex-col gap-3 items-end z-50">
+      {/* Floating Action Buttons - Better positioned */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
         <Button
           onClick={() => navigate('/invite')}
-          variant="outline"
           size="lg"
-          className="rounded-full backdrop-blur-xl bg-white/80 dark:bg-black/60 border-2 border-white/50 dark:border-white/20 shadow-2xl hover:scale-105 transition-transform h-14 px-6"
+          className="rounded-full backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border-2 border-indigo-200 dark:border-indigo-800 shadow-xl hover:shadow-2xl hover:scale-105 transition-all h-12 px-5"
         >
-          <Users className="mr-2 h-5 w-5" /> Invite Members
+          <Users className="mr-2 h-4 w-4" />
+          <span className="hidden sm:inline">Invite Members</span>
+          <span className="sm:hidden">Invite</span>
         </Button>
         
         <Button
           onClick={() => setShowCreateDialog(true)}
           size="lg"
-          className="rounded-full h-16 px-8 shadow-2xl bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 hover:scale-110 transition-all text-lg"
+          className="rounded-full h-14 px-6 shadow-xl bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 hover:shadow-2xl hover:scale-110 transition-all"
         >
-          <Plus className="mr-2 h-6 w-6" /> Create Board
+          <Plus className="mr-2 h-5 w-5" />
+          <span className="hidden sm:inline">Create Board</span>
+          <span className="sm:hidden">New</span>
         </Button>
       </div>
 
