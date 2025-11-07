@@ -17,6 +17,10 @@ export default defineConfig(({ mode }) => ({
       allow: [".", "./client", "./shared", "./node_modules"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**"],
     },
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
   },
   build: {
     outDir: "dist/spa",
