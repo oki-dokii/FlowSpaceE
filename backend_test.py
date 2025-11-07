@@ -81,45 +81,80 @@ class FlowSpaceInviteTester:
         return jwt.encode(payload, JWT_SECRET, algorithm='HS256')
     
     def setup_test_data(self):
-        """Create test user and board"""
+        """Create test users and board"""
         print(f"\n{Colors.BOLD}Setting up test data...{Colors.RESET}")
         
-        # Create test user directly in MongoDB
         try:
             from pymongo import MongoClient
+            from bson import ObjectId
             client = MongoClient('mongodb://localhost:27017/flowspace')
             db = client['flowspace']
             
-            # Create or get test user
-            test_user = db.users.find_one({'email': 'test@flowspace.com'})
-            if not test_user:
-                user_data = {
-                    'name': 'Test User',
-                    'email': 'test@flowspace.com',
-                    'password': 'test123',
+            # Create owner user
+            owner_user = db.users.find_one({'email': self.owner_email})
+            if not owner_user:
+                owner_data = {
+                    'name': 'Board Owner',
+                    'email': self.owner_email,
+                    'password': 'owner123',
                     'createdAt': datetime.utcnow(),
                     'updatedAt': datetime.utcnow()
                 }
-                result = db.users.insert_one(user_data)
-                self.user_id = str(result.inserted_id)
-                print(f"  Created test user: {self.user_id}")
+                result = db.users.insert_one(owner_data)
+                self.owner_id = str(result.inserted_id)
+                print(f"  Created owner user: {self.owner_id}")
             else:
-                self.user_id = str(test_user['_id'])
-                print(f"  Using existing test user: {self.user_id}")
+                self.owner_id = str(owner_user['_id'])
+                print(f"  Using existing owner user: {self.owner_id}")
             
-            # Generate JWT token
-            self.token = self.generate_jwt_token(self.user_id)
-            print(f"  Generated JWT token")
+            self.owner_token = self.generate_jwt_token(self.owner_id)
             
-            # Create test board with columns
-            from bson import ObjectId
-            owner_id = test_user['_id'] if test_user else ObjectId(self.user_id)
+            # Create invitee user
+            invitee_user = db.users.find_one({'email': self.invitee_email})
+            if not invitee_user:
+                invitee_data = {
+                    'name': 'Invited User',
+                    'email': self.invitee_email,
+                    'password': 'invitee123',
+                    'createdAt': datetime.utcnow(),
+                    'updatedAt': datetime.utcnow()
+                }
+                result = db.users.insert_one(invitee_data)
+                self.invitee_id = str(result.inserted_id)
+                print(f"  Created invitee user: {self.invitee_id}")
+            else:
+                self.invitee_id = str(invitee_user['_id'])
+                print(f"  Using existing invitee user: {self.invitee_id}")
+            
+            self.invitee_token = self.generate_jwt_token(self.invitee_id)
+            
+            # Create viewer user (for permission tests)
+            viewer_user = db.users.find_one({'email': self.viewer_email})
+            if not viewer_user:
+                viewer_data = {
+                    'name': 'Viewer User',
+                    'email': self.viewer_email,
+                    'password': 'viewer123',
+                    'createdAt': datetime.utcnow(),
+                    'updatedAt': datetime.utcnow()
+                }
+                result = db.users.insert_one(viewer_data)
+                self.viewer_id = str(result.inserted_id)
+                print(f"  Created viewer user: {self.viewer_id}")
+            else:
+                self.viewer_id = str(viewer_user['_id'])
+                print(f"  Using existing viewer user: {self.viewer_id}")
+            
+            self.viewer_token = self.generate_jwt_token(self.viewer_id)
+            
+            # Create test board owned by owner
+            owner_obj_id = owner_user['_id'] if owner_user else ObjectId(self.owner_id)
             
             board_data = {
-                'title': 'Test Board for Card Operations',
-                'description': 'Testing card CRUD and activity logging',
-                'ownerId': owner_id,
-                'members': [],
+                'title': 'Collaboration Test Board',
+                'description': 'Testing invite and collaboration features',
+                'ownerId': owner_obj_id,
+                'members': [{'userId': owner_obj_id, 'role': 'owner'}],
                 'columns': [
                     {'_id': ObjectId(), 'title': 'To Do', 'order': 0},
                     {'_id': ObjectId(), 'title': 'In Progress', 'order': 1},
@@ -130,8 +165,6 @@ class FlowSpaceInviteTester:
             }
             board_result = db.boards.insert_one(board_data)
             self.board_id = str(board_result.inserted_id)
-            
-            # Get column ID
             self.column_id = str(board_data['columns'][0]['_id'])
             
             print(f"  Created test board: {self.board_id}")
@@ -141,6 +174,8 @@ class FlowSpaceInviteTester:
             
         except Exception as e:
             print(f"{Colors.RED}Failed to setup test data: {str(e)}{Colors.RESET}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def cleanup_test_data(self):
