@@ -23,7 +23,40 @@
 
 ### Previous Test Summary: 27/27 Tests Passed ✅
 
-#### 1. Create Invite Link (POST /api/invite)
+#### SMTP Email Invite System Tests (18/18 Passed)
+
+**Test 1: Complete Invite Flow with Email (4/4 Passed)**
+- ✅ Invite Response Structure: success, token, inviteLink, message all present
+- ✅ SMTP Email Sending: Email sent successfully (no warning in response)
+- ✅ Invite Database Fields: boardId, email, role='editor', status='pending' all correct
+- ✅ Invite Expiry Date: Set to 7 days from creation
+
+**Test 2: Invite with Board Selection (4/4 Passed)**
+- ✅ Invite Created for Board A with correct token
+- ✅ Board A Invite Has Correct Board ID in database
+- ✅ Invite Created for Board B with correct token
+- ✅ Board B Invite Has Correct Board ID in database
+
+**Test 3: Accept Invite and Join Board (3/3 Passed)**
+- ✅ Accept Invite API: Returns success=true and board details
+- ✅ User Added to Board Members: Invitee added with role='editor'
+- ✅ Invite Status Changed to 'accepted' in database
+- ℹ️ Socket.io 'board:member-joined' event emitted (requires WebSocket client to verify)
+
+**Test 4: Verify Collaboration After Invite (4/4 Passed)**
+- ✅ Second User Can Create Card on shared board
+- ✅ Card Has createdBy Field populated with user data
+- ✅ Card Created By Second User verified (email matches)
+- ✅ Card Shows User Avatar: avatarUrl field present
+
+**Test 5: Test Permissions (3/3 Passed)**
+- ✅ Viewer Accepts Invite successfully
+- ✅ Viewer CANNOT Send Invites (403 Forbidden)
+- ✅ Viewer CAN View Cards (200 OK)
+
+---
+
+#### Previous Tests: Create Invite Link (POST /api/invite)
 - ✅ Invite created successfully with correct status code (200)
 - ✅ Invite token generated and returned
 - ✅ Invite link returned in response
