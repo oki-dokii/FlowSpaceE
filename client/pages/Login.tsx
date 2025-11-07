@@ -39,6 +39,9 @@ export default function Login() {
         description: "Successfully logged in.",
       });
       
+      // Wait a bit for AuthContext to complete JWT exchange
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       navigate("/board");
     } catch (error: any) {
       console.error("Login error:", error);
