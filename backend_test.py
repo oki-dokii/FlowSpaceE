@@ -210,65 +210,88 @@ class FlowSpaceInviteTester:
         except Exception as e:
             print(f"{Colors.YELLOW}Warning: Cleanup failed: {str(e)}{Colors.RESET}")
     
-    def test_card_creation(self):
-        """Test POST /api/cards/:boardId/cards"""
-        print(f"\n{Colors.BOLD}Test 1: Card Creation{Colors.RESET}")
+    def test_create_invite(self):
+        """Test POST /api/invite - Create invite link"""
+        print(f"\n{Colors.BOLD}Test 1: Create Invite Link{Colors.RESET}")
         
-        url = f"{self.base_url}/api/cards/{self.board_id}/cards"
+        url = f"{self.base_url}/api/invite"
         headers = {
-            'Authorization': f'Bearer {self.token}',
+            'Authorization': f'Bearer {self.owner_token}',
             'Content-Type': 'application/json'
         }
         
-        card_data = {
-            'columnId': self.column_id,
-            'title': 'Test Card - Backend Testing',
-            'description': 'This card is created by automated backend tests',
-            'tags': ['test', 'automation'],
-            'dueDate': (datetime.utcnow() + timedelta(days=7)).isoformat()
+        invite_data = {
+            'boardId': self.board_id,
+            'email': self.invitee_email,
+            'role': 'editor'
         }
         
         try:
-            response = requests.post(url, json=card_data, headers=headers)
+            response = requests.post(url, json=invite_data, headers=headers)
             
-            if response.status_code == 201:
+            if response.status_code == 200:
                 data = response.json()
-                if 'card' in data:
-                    self.card_id = data['card']['_id']
-                    self.log_test(
-                        "Card Creation API",
-                        True,
-                        f"Card created successfully with ID: {self.card_id}"
-                    )
+                
+                # Check response fields
+                has_token = 'token' in data
+                has_link = 'inviteLink' in data
+                has_success = data.get('success') == True
+                
+                self.log_test(
+                    "Invite Creation API",
+                    has_token and has_link and has_success,
+                    f"Invite created with token and link" if (has_token and has_link) else f"Missing fields in response: {data}"
+                )
+                
+                if has_token:
+                    self.invite_token = data['token']
+                    self.invite_link = data.get('inviteLink', '')
+                    print(f"  Invite token: {self.invite_token}")
+                    print(f"  Invite link: {self.invite_link}")
                     
-                    # Verify card fields
-                    card = data['card']
-                    fields_ok = (
-                        card['title'] == card_data['title'] and
-                        card['description'] == card_data['description'] and
-                        card['columnId'] == self.column_id and
-                        card['boardId'] == self.board_id
-                    )
-                    self.log_test(
-                        "Card Fields Validation",
-                        fields_ok,
-                        "All card fields match expected values" if fields_ok else "Card fields mismatch"
-                    )
+                    # Verify invite in database
+                    time.sleep(0.5)
+                    from pymongo import MongoClient
+                    client = MongoClient('mongodb://localhost:27017/flowspace')
+                    db = client['flowspace']
+                    
+                    invite_doc = db.invites.find_one({'token': self.invite_token})
+                    if invite_doc:
+                        # Check fields
+                        fields_ok = (
+                            str(invite_doc['boardId']) == self.board_id and
+                            invite_doc['email'] == self.invitee_email and
+                            invite_doc['role'] == 'editor' and
+                            invite_doc['status'] == 'pending'
+                        )
+                        
+                        # Check expiry (should be ~7 days from now)
+                        expiry_ok = invite_doc['expiresAt'] > datetime.utcnow()
+                        days_until_expiry = (invite_doc['expiresAt'] - datetime.utcnow()).days
+                        
+                        self.log_test(
+                            "Invite Database Verification",
+                            fields_ok and expiry_ok,
+                            f"Invite stored correctly, expires in {days_until_expiry} days" if (fields_ok and expiry_ok) else "Invite fields incorrect"
+                        )
+                    else:
+                        self.log_test("Invite Database Verification", False, "Invite not found in database")
                     
                     return True
                 else:
-                    self.log_test("Card Creation API", False, "Response missing 'card' field")
                     return False
             else:
                 self.log_test(
-                    "Card Creation API",
+                    "Invite Creation API",
                     False,
-                    f"Expected status 201, got {response.status_code}: {response.text}"
+                    f"Expected status 200, got {response.status_code}: {response.text}"
                 )
                 return False
                 
         except Exception as e:
-            self.log_test("Card Creation API", False, f"Exception: {str(e)}")
+            self.log_test("Invite Creation API", False, f"Exception: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def test_card_retrieval(self):
