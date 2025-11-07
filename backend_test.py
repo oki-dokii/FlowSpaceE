@@ -1247,7 +1247,7 @@ class FlowSpaceInviteTester:
 
 def main():
     print(f"{Colors.BOLD}{'='*60}{Colors.RESET}")
-    print(f"{Colors.BOLD}FlowSpace Backend Testing - Invite & Collaboration System{Colors.RESET}")
+    print(f"{Colors.BOLD}FlowSpace Backend Testing - Collaboration Features with Avatars{Colors.RESET}")
     print(f"{Colors.BOLD}{'='*60}{Colors.RESET}")
     
     tester = FlowSpaceInviteTester()
@@ -1258,13 +1258,20 @@ def main():
         return False
     
     try:
-        # Run tests
+        # Run original tests
         tester.test_create_invite()
         tester.test_accept_invite()
         tester.test_list_invites()
         tester.test_member_board_access()
         tester.test_member_card_access()
         tester.test_permissions()
+        
+        # Run new avatar and activity tracking tests
+        tester.test_card_creation_with_user_tracking()
+        tester.test_card_update_with_user_tracking()
+        tester.test_activity_feed_with_avatars()
+        tester.test_invite_with_board_selection()
+        tester.test_multiple_users_collaboration()
         
         # Print summary
         all_passed = tester.print_summary()
