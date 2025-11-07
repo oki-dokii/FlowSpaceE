@@ -2,38 +2,71 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Mail, CheckCircle2, Copy } from 'lucide-react';
-import { sendInvite } from '@/lib/api-teams';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Mail, CheckCircle2, Copy, Link as LinkIcon, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useBoard } from '@/contexts/BoardContext';
 
 export default function Invite() {
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState<'editor' | 'viewer'>('editor');
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [inviteLink, setInviteLink] = useState('');
   const { toast } = useToast();
-
-  const inviteLink = `${window.location.origin}/board`;
+  const { currentBoard } = useBoard();
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim()) return;
+    if (!currentBoard) {
+      toast({
+        title: 'No board selected',
+        description: 'Please select a board first',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     try {
       setSending(true);
-      await sendInvite({ email });
+      
+      const API_URL = import.meta.env.VITE_BACKEND_URL || (window as any).REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      const response = await fetch(`${API_URL}/api/invite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          boardId: currentBoard._id,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send invite');
+      }
+
       setSent(true);
+      setInviteLink(data.inviteLink || '');
+      
       toast({
         title: 'Invite sent!',
-        description: `Invitation email sent to ${email}`,
+        description: data.warning || `Invitation sent to ${email}`,
       });
+      
       setTimeout(() => {
         setSent(false);
         setEmail('');
-      }, 2000);
-    } catch (err) {
+      }, 3000);
+    } catch (err: any) {
       toast({
         title: 'Failed to send invite',
-        description: 'Please check SMTP configuration',
+        description: err.message || 'Please check your connection',
         variant: 'destructive',
       });
     } finally {
@@ -42,7 +75,8 @@ export default function Invite() {
   }
 
   function copyLink() {
-    navigator.clipboard.writeText(inviteLink);
+    const linkToCopy = inviteLink || `${window.location.origin}/board`;
+    navigator.clipboard.writeText(linkToCopy);
     toast({
       title: 'Link copied!',
       description: 'Invite link copied to clipboard',
