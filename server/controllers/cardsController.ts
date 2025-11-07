@@ -46,7 +46,6 @@ export const createCard: RequestHandler = async (req, res, next) => {
 
     // Log activity
     try {
-      const Activity = (await import('../models/Activity')).Activity;
       const activity = await Activity.create({
         userId,
         boardId,
