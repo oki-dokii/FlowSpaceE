@@ -17,18 +17,19 @@ export default function RichTextEditor({
 }: RichTextEditorProps) {
   const quillRef = useRef<ReactQuill>(null);
 
-  // Google Docs-like toolbar configuration
+  // Enhanced Google Docs-like toolbar configuration
   const modules = useMemo(() => ({
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
+        [{ 'font': ['sans-serif', 'serif', 'monospace', 'arial', 'comic-sans', 'courier-new', 'georgia', 'helvetica', 'lucida'] }],
         [{ 'size': ['small', false, 'large', 'huge'] }],
         ['bold', 'italic', 'underline', 'strike'],
         [{ 'color': [] }, { 'background': [] }],
         [{ 'script': 'sub'}, { 'script': 'super' }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
         [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
         [{ 'align': [] }],
         ['blockquote', 'code-block'],
         ['link', 'image', 'video'],
