@@ -27,43 +27,47 @@ interface CardType {
   order: number;
 }
 
-const columnConfig = {
-  'todo': { 
-    title: 'To Do',
-    icon: ListTodo,
-    gradient: 'from-blue-500/20 via-blue-400/10 to-transparent',
-    borderColor: 'border-blue-500/30',
-    glowColor: 'shadow-blue-500/20',
-    iconColor: 'text-blue-400',
-    badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/30'
-  },
-  'in-progress': { 
-    title: 'In Progress',
-    icon: Clock,
-    gradient: 'from-violet-500/20 via-violet-400/10 to-transparent',
-    borderColor: 'border-violet-500/30',
-    glowColor: 'shadow-violet-500/20',
-    iconColor: 'text-violet-400',
-    badgeColor: 'bg-violet-500/20 text-violet-300 border-violet-400/30'
-  },
-  'review': { 
-    title: 'Review',
-    icon: Sparkles,
-    gradient: 'from-amber-500/20 via-amber-400/10 to-transparent',
-    borderColor: 'border-amber-500/30',
-    glowColor: 'shadow-amber-500/20',
-    iconColor: 'text-amber-400',
-    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-400/30'
-  },
-  'done': { 
-    title: 'Done',
-    icon: CheckCircle2,
-    gradient: 'from-green-500/20 via-green-400/10 to-transparent',
-    borderColor: 'border-green-500/30',
-    glowColor: 'shadow-green-500/20',
-    iconColor: 'text-green-400',
-    badgeColor: 'bg-green-500/20 text-green-300 border-green-400/30'
-  },
+const getColumnConfig = (title: string) => {
+  const lowerTitle = title.toLowerCase();
+  
+  if (lowerTitle.includes('progress') || lowerTitle === 'in progress') {
+    return {
+      icon: Clock,
+      gradient: 'from-violet-500/20 via-violet-400/10 to-transparent',
+      borderColor: 'border-violet-500/30',
+      glowColor: 'shadow-violet-500/20',
+      iconColor: 'text-violet-400',
+      badgeColor: 'bg-violet-500/20 text-violet-300 border-violet-400/30'
+    };
+  } else if (lowerTitle.includes('review')) {
+    return {
+      icon: Sparkles,
+      gradient: 'from-amber-500/20 via-amber-400/10 to-transparent',
+      borderColor: 'border-amber-500/30',
+      glowColor: 'shadow-amber-500/20',
+      iconColor: 'text-amber-400',
+      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-400/30'
+    };
+  } else if (lowerTitle.includes('done') || lowerTitle.includes('complete')) {
+    return {
+      icon: CheckCircle2,
+      gradient: 'from-green-500/20 via-green-400/10 to-transparent',
+      borderColor: 'border-green-500/30',
+      glowColor: 'shadow-green-500/20',
+      iconColor: 'text-green-400',
+      badgeColor: 'bg-green-500/20 text-green-300 border-green-400/30'
+    };
+  } else {
+    // Default to "To Do" style
+    return {
+      icon: ListTodo,
+      gradient: 'from-blue-500/20 via-blue-400/10 to-transparent',
+      borderColor: 'border-blue-500/30',
+      glowColor: 'shadow-blue-500/20',
+      iconColor: 'text-blue-400',
+      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-400/30'
+    };
+  }
 };
 
 export default function GlassyKanbanBoard() {
