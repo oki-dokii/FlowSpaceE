@@ -83,10 +83,13 @@
 ### Technical Details
 - **Backend URL:** http://localhost:8001
 - **Authentication:** JWT tokens working correctly
-- **Database:** MongoDB invites collection verified
+- **Database:** MongoDB collections verified (invites, cards, activities, users)
+- **User Tracking:** Cards include createdBy and updatedBy fields with ObjectId references
+- **User Population:** All user references populated with name, email, and avatarUrl
+- **Avatar Support:** avatarUrl field included in User model and populated in all responses
+- **Activity Logging:** All card operations logged with user attribution
 - **Invite Fields:** boardId, invitedBy, email, token, role, status, expiresAt all correct
-- **Socket.io:** board:member-joined event emitted on invite acceptance
-- **User Population:** invitedBy field properly populated with user details
+- **Socket.io:** Real-time events for card operations and board membership
 - **Permissions:** Role-based access control working correctly
 
 ## Changes Made (Latest Session)
