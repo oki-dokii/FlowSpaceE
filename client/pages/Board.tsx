@@ -100,17 +100,15 @@ export default function Board() {
         <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 py-6 pb-32 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Kanban Board - Takes half width on large screens */}
-          <div className="lg:col-span-1">
-            <GlassyKanbanBoard />
-          </div>
+      <div className="w-full px-4 sm:px-6 py-6 pb-32 relative z-10">
+        {/* Kanban Board - Full width */}
+        <div className="mb-6">
+          <GlassyKanbanBoard />
+        </div>
 
-          {/* Notes Panel - Takes half width on large screens */}
-          <div className="lg:col-span-1">
-            <NotesPanel />
-          </div>
+        {/* Notes Panel - Full width below board */}
+        <div className="max-w-7xl mx-auto">
+          <NotesPanel />
         </div>
       </div>
 
