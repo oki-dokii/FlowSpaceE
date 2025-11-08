@@ -1,6 +1,6 @@
 import GlassyKanbanBoard from "@/components/kanban/GlassyKanbanBoard";
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NotesPanel } from "@/components/notes/NotesPanel";
 import { Button } from "@/components/ui/button";
 import { Plus, Users, Loader2 } from "lucide-react";
