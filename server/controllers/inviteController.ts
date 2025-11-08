@@ -115,6 +115,26 @@ export const getInviteDetails: RequestHandler = async (req, res, next) => {
     const { token } = req.params;
     if (!token) return res.status(400).json({ message: 'Token required' });
 
+    // DEMO MODE: If token is 'demo', return mock data for demonstration
+    if (token === 'demo' || token.startsWith('demo-')) {
+      return res.json({
+        success: true,
+        invite: {
+          email: 'demo@example.com',
+          role: 'editor',
+          invitedBy: {
+            name: 'Demo User',
+            email: 'inviter@example.com'
+          },
+          board: {
+            _id: 'demo-board-123',
+            title: 'Demo Project Board',
+            description: 'This is a demo board for presentation purposes'
+          }
+        }
+      });
+    }
+
     // Find invite
     const invite = await Invite.findOne({ token }).populate('invitedBy', 'name email');
     if (!invite) return res.status(404).json({ message: 'Invite not found' });
