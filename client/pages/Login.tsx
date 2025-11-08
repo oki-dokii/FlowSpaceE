@@ -17,13 +17,17 @@ export default function Login() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Get redirect URL from query params
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectUrl = searchParams.get('redirect') || '/board';
 
   // Redirect if already logged in
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      navigate("/board");
+      navigate(redirectUrl);
     }
-  }, [authLoading, isAuthenticated, navigate]);
+  }, [authLoading, isAuthenticated, navigate, redirectUrl]);
 
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
