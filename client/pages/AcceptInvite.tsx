@@ -115,9 +115,12 @@ export default function AcceptInvite() {
         description: 'Invite accepted successfully',
       });
 
-      // Redirect to the board after 2 seconds
+      // Redirect to the specific board after 2 seconds
       setTimeout(() => {
-        navigate(`/board`);
+        if (data.board?._id) {
+          navigate(`/board/${data.board._id}`);
+        } else {
+          navigate(`/board`);
       }, 2000);
     } catch (err: any) {
       setStatus('error');
