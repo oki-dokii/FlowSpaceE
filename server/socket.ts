@@ -32,17 +32,8 @@ export function initSocket(server: http.Server) {
     // Card update is handled by HTTP API, not socket
     // Socket only receives broadcast from server after HTTP update
 
-    socket.on("card:delete", async (data) => {
-      try {
-        const { id } = data;
-        const card = await Card.findByIdAndDelete(id);
-        const room = `board:${card?.boardId}`;
-        if (room) socket.to(room).emit("card:delete", { id });
-        socket.emit("card:delete:ok", { id });
-      } catch (err) {
-        socket.emit("error", { message: "Failed to delete card" });
-      }
-    });
+    // Card deletion is handled by HTTP API, not socket
+    // Socket only receives broadcast from server after HTTP delete
 
     socket.on("note:update", async (data) => {
       try {
