@@ -121,6 +121,7 @@ export default function AcceptInvite() {
           navigate(`/board/${data.board._id}`);
         } else {
           navigate(`/board`);
+        }
       }, 2000);
     } catch (err: any) {
       setStatus('error');
