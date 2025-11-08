@@ -182,6 +182,19 @@ export const acceptInvite: RequestHandler = async (req, res, next) => {
     const { token } = req.params;
     if (!token) return res.status(400).json({ message: 'Token required' });
 
+    // DEMO MODE: If token is 'demo', return success without database operations
+    if (token === 'demo' || token.startsWith('demo-')) {
+      return res.json({
+        success: true,
+        message: 'Demo invite accepted! In production, you would be added to the board.',
+        board: {
+          _id: 'demo-board-123',
+          title: 'Demo Project Board',
+          description: 'This is a demo board for presentation purposes'
+        }
+      });
+    }
+
     // Find invite
     const invite = await Invite.findOne({ token });
     if (!invite) return res.status(404).json({ message: 'Invite not found' });
