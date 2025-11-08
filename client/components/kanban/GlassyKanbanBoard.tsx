@@ -108,27 +108,32 @@ export default function GlassyKanbanBoard() {
         const cardsData = await listCards(currentBoard._id);
         const freshCards = cardsData.cards || [];
         
-        // Only update if cards have changed (avoid unnecessary re-renders)
-        const currentIds = new Set(localCards.map(c => c._id));
-        const freshIds = new Set(freshCards.map((c: CardType) => c._id));
-        
-        const hasChanges = 
-          currentIds.size !== freshIds.size ||
-          freshCards.some((fc: CardType) => !currentIds.has(fc._id)) ||
-          localCards.some(lc => !freshIds.has(lc._id));
-        
-        if (hasChanges) {
-          console.log('🔄 Syncing cards from database...');
-          setLocalCards(freshCards);
-          setCards(freshCards);
-        }
+        // Compare using current state from closure
+        setLocalCards((currentCards) => {
+          // Only update if cards have changed (avoid unnecessary re-renders)
+          const currentIds = new Set(currentCards.map(c => c._id));
+          const freshIds = new Set(freshCards.map((c: CardType) => c._id));
+          
+          const hasChanges = 
+            currentIds.size !== freshIds.size ||
+            freshCards.some((fc: CardType) => !currentIds.has(fc._id)) ||
+            currentCards.some(lc => !freshIds.has(lc._id));
+          
+          if (hasChanges) {
+            console.log('🔄 Syncing cards from database...');
+            setCards(freshCards);
+            return freshCards;
+          }
+          
+          return currentCards;
+        });
       } catch (err) {
         console.error('Failed to poll cards:', err);
       }
     }, 5000); // Poll every 5 seconds
 
     return () => clearInterval(pollInterval);
-  }, [currentBoard?._id, localCards, setCards]);
+  }, [currentBoard?._id, setCards]);
 
   const columns = useMemo(() => {
     if (!currentBoard?.columns) return [];
