@@ -26,27 +26,8 @@ export function initSocket(server: http.Server) {
         .emit("presence:update", { id: socket.id, event: "leave" });
     });
 
-    socket.on("card:create", async (data) => {
-      try {
-        const card = await Card.create(data);
-        const room = `board:${data.boardId}`;
-        socket.to(room).emit("card:create", card);
-        socket.emit("card:create:ok", card);
-        
-        // Create activity
-        const activity = await Activity.create({
-          userId: data.createdBy || socket.id,
-          action: `created card "${card.title}"`,
-          entityType: 'card',
-          entityId: card._id,
-          boardId: data.boardId,
-        });
-        const populated = await Activity.findById(activity._id).populate('userId', 'name email');
-        io.emit("activity:new", populated);
-      } catch (err) {
-        socket.emit("error", { message: "Failed to create card" });
-      }
-    });
+    // Card creation is handled by HTTP API, not socket
+    // Socket only receives broadcast from server after HTTP create
 
     socket.on("card:update", async (data) => {
       try {
