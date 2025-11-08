@@ -16,8 +16,9 @@ import { useBoard } from "@/contexts/BoardContext";
 import confetti from "canvas-confetti";
 
 export default function Board() {
+  const { boardId } = useParams<{ boardId?: string }>();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const { isLoading: boardLoading } = useBoard();
+  const { isLoading: boardLoading, setCurrentBoardId } = useBoard();
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
@@ -25,6 +26,13 @@ export default function Board() {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [boardData, setBoardData] = useState({ title: '', description: '' });
   const [inviteEmail, setInviteEmail] = useState('');
+  
+  // Set the current board ID if provided in URL
+  useEffect(() => {
+    if (boardId && setCurrentBoardId) {
+      setCurrentBoardId(boardId);
+    }
+  }, [boardId, setCurrentBoardId]);
 
   function onMove(e: React.MouseEvent) {
     const el = ref.current;
